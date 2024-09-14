@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Color changing</title>
+</head>
+<body>
+    <div id="div1" onclick="changeColor('div2')" style="background-color: black; height: 100px; width: 300px;">
+    </div>
+
+    <div id="div2" onclick="changeColor('div1')" style="background-color: blue; height: 100px; width: 300px;"></div>
+</body>
+<script>
+    function changeColor(div){
+        const colourEl = document.getElementById(div);
+        colourEl.style.backgroundColor = "red";
+    }
+</script>
+</html>

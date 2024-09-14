@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Todo</title>
+</head>
+
+    <body>
+        <input type="text"></input>
+        <button onclick="addTodo()">Add todo!</button>
+        <div id="todos"></div>
+        <script>
+          let todos = [];
+          function addTodo() {
+            todos.push({
+              title: document.querySelector("input").value
+            })
+            render();
+          }
+      
+          function deleteTodo(id) {
+           todos.splice(id, 1)
+            render();
+          }
+       
+          function markascompleted(id){
+            todos[id].completed = !todos[id].completed;
+            render();
+          }
+
+          function update(id){
+            todos[id].title = document.querySelector("input").value;
+          }
+          function render() {
+            document.querySelector('#todos').innerHTML = "";
+            for(let i=0 ; i < todos.length ; i++){ 
+                let todo = todos[i];
+                const divEl =document.createElement('div');
+                const h1 = document.createElement('h1');
+                const button = document.createElement('button');
+                const buttonc = document.createElement('button');
+                const buttonu = document.createElement('button');
+                if(todo.completed){
+                  h1.style.textDecoration = 'line-through'
+                }
+                h1.innerHTML = todo.title;
+                button.innerHTML = 'Delete';
+                buttonu.innerHTML = 'Update';
+                buttonc.innerHTML = todo.completed ? 'Mark as Incomplete' : 'Mark as Completed';
+                button.onclick = function() {deleteTodo(i)};
+                buttonc.onclick = function() {markascompleted(i)};
+                buttonu.onclick = function() {update(i)};
+
+                divEl.appendChild(h1);
+                divEl.appendChild(button);
+                divEl.appendChild(buttonc);
+                divEl.appendChild(buttonu);
+
+                const parentEl = document.querySelector('#todos');
+                parentEl.appendChild(divEl);
+
+            }
+            
+          }
+        </script>
+      
+</body>
+</html>
