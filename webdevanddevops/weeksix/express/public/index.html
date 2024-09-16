@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>   
+<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.7.7/axios.min.js"></script>
+    <script>
+        let signinstate = false;
+        let signupstate = true;
+       async function signup(){
+            await axios.post("http://localhost:3000/signup",{
+                username : document.getElementById('username').value,
+                password : document.getElementById('password').value
+            });
+            signinstate = true;
+            signupstate=false;
+            
+            renderPage();
+            alert("user signed up ")
+        }
+        
+        
+        async function signin(){
+               const response =  await axios.post('http://localhost:3000/signin', {
+                username : document.getElementById('signin-username').value,
+                password : document.getElementById('signin-password').value
+                })
+
+                localStorage.setItem("token" , response.data.token);
+                localStorage.setItem("signinstate", "true");
+                localStorage.setItem("signupstate", "false");
+                console.log(response.data.token)
+                alert("you are signed in");
+                renderPage();
+        }
+        
+        async function getUserInformation(){
+           const response = await axios.get('http://localhost:3000/me', {
+                    headers:{
+                        token : localStorage.getItem('token')
+                    }
+            });
+            document.getElementById('information').innerHTML = "Username =" + response.data.username + "Password =" + response.data.password
+        }
+
+        function logout() {
+            localStorage.removeItem("token");
+            localStorage.setItem("signinstate", "false");
+            renderPage();
+        }
+        function renderPage() {
+            const signinstate = localStorage.getItem("signinstate");
+            const signupstate = localStorage.getItem("signupstate");
+ 
+            if (signinstate) {
+                document.getElementById('signindiv').style.display = 'block'; 
+                document.getElementById('signupdiv').style.display = 'none';
+            } else if(signupstate){
+                document.getElementById('signupdiv').style.display = 'none';
+                document.getElementById('signindiv').style.display = 'none';
+                getUserInformation();
+            }
+            else {
+                document.getElementById('signupdiv').style.display = 'block';
+            }
+        }
+
+        window.onload = function() {
+            renderPage();  // Render page on load based on signinstate
+        };
+   </script>
+</head>
+<body>
+    
+    <div id="signupdiv">
+        Signup
+        <input type="text" id="username" name="username" placeholder="Username">
+        <input type="password"  id="password" name="password" placeholder="Password">
+        <button onclick="signup()">Submit</button>
+    </div>
+    <div id="signindiv">
+        Signin
+        <input type="text" id="signin-username" name="username" placeholder="Username">
+        <input type="password" id="signin-password" name="password" placeholder="Password">
+        <button onclick="signin()">Submit</button>
+    </div>
+    <div>
+        User information: 
+        <div id="information"></div>
+    </div>
+    <div>
+        <button onclick="logout()">Logout</button>
+    </div>
+</body>
+</html>
