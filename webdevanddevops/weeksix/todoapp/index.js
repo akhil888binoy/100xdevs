@@ -93,8 +93,8 @@ app.post("/todo", auth, (req, res) => {
   }
 });
 
-app.delete("/todo/:todoId", auth, (req, res) => {
-  const todoId = req.params.todoId - 1;
+app.delete("/todo", auth, (req, res) => {
+  const todoId = req.body.todoId - 1;
   const foundUser = users.find((item) => item.username == req.username);
   if (!foundUser) {
     res.json({
@@ -109,9 +109,9 @@ app.delete("/todo/:todoId", auth, (req, res) => {
   }
 });
 
-app.put("/todo/:todoId", auth, (req, res) => {
+app.put("/todo", auth, (req, res) => {
   const updateTodo = req.body.updateTodo;
-  const todoId = req.params.todoId;
+  const todoId = req.body.todoId;
   const foundUser = users.find((item) => item.username == req.username);
   const foundtodo = foundUser.todos.find((item) => item.id == todoId);
   if (!foundUser) {
